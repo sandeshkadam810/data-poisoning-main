@@ -18,7 +18,9 @@ class KettleRandom(_Kettle):
     def prepare_experiment(self):
         """Choose targets from some label which will be poisoned toward some other chosen label, by modifying some
         subset of the training data within some bounds."""
+        self.init_seed = np.random.randint(0, 2**31 - 1)  # Ensure it's set before use
         self.random_construction()
+
 
 
     def random_construction(self):
@@ -32,7 +34,7 @@ class KettleRandom(_Kettle):
         """
         if self.args.local_rank is None:
             if self.args.poisonkey is None:
-                self.init_seed = np.random.randint(0, 2**32 - 1)
+                self.model_init_seed = np.random.randint(0, 2**31 - 1)  # Use 2**31 - 1 instead of 2**32 - 1
             else:
                 self.init_seed = int(self.args.poisonkey)
             set_random_seed(self.init_seed)

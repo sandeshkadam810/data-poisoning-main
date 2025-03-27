@@ -24,7 +24,9 @@ import time
 import forest
 from forest.filtering_defenses import get_defense
 torch.backends.cudnn.benchmark = forest.consts.BENCHMARK
-torch.multiprocessing.set_sharing_strategy(forest.consts.SHARING_STRATEGY)
+import torch.multiprocessing as mp
+mp.set_sharing_strategy('file_system')
+
 
 # Parse input arguments
 args = forest.options().parse_args()
