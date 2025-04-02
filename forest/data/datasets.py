@@ -137,10 +137,17 @@ def construct_datasets(dataset, data_path, normalize=True):
 
 class Subset(torch.utils.data.Subset):
     """Overwrite subset class to provide class methods of main class."""
+    
 
-    def __getattr__(self, name):
-        """Call this only if all attributes of Subset are exhausted."""
-        return getattr(self.dataset, name)
+class Dataset:
+    def __getattr__(self, name):  # Ensure 'self' is always the first argument
+        if "dataset" in self.__dict__:  # Avoid recursion issues
+            if hasattr(self.dataset, name):
+                return getattr(self.dataset, name)
+        raise AttributeError(f"'Dataset' object has no attribute '{name}'")
+
+
+
 
 
 class Deltaset(torch.utils.data.Dataset):
